@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>Задание</title>
+		<link rel="stylesheet" href="/css/styles.css" />
+	</head>
+	<body>
+		<div class="sidenav">
+ 			<a href="/addtask">Добавить задание</a>
+			<a href="/addproject" >Добавить проект</a>
+			<a href="/addgroup">Добавить группу</a>
+			<a href="/tasks">Задания</a>
+			<a href="/projects">Проекты</a>
+			<a href="/groups">Группы</a>
+			<a href="/favorites">Избранное</a>
+		</div>
+		<div class="main">
+			<form th:action="@{'/tasks/'+${task.id}}" method="post">
+				<button type="submit" name="fav"
+				th:text="${message}"></button>
+				<button type="submit" name ="edit">
+				Редактировать задание</button>
+				<button type="submit" name ="deleteTask">
+				Удалить задание</button>
+			</form>
+			<div><span th:text="'Заголовок: '+${task.name}"></span></div>
+			<div><span th:text="'Исполнитель: '+${task.executor.name}"></span></div>
+			<div><span th:text="'Приоритет: '+${task.priority}"></span></div>
+			<div><span th:text="'Описание: '+${task.description}"></span></div>
+			<div><span th:text="'Название проекта: '+${task.project.name}"></span></div>
+			<div><span th:text="'Дедлайн: '+${task.dueDate}"></span></div>
+			<div><h3>КОММЕНТАРИИ</h3></div>
+			<div th:each="c: ${task.comments}">
+				<p th:text="${c.user.name}"></p><br />
+				<p th:text="${c.text}"></p>
+			</div>
+			<form th:action="@{'/tasks/'+${task.id}}" method="post" th:object="${comment}">
+				<input type="text" th:field="*{text}" placeholder="Оставить комментарий">
+				<button type="submit" name="sendComment">Отправить</button>
+			</form>
+		</div>
+	</body>
+</html>

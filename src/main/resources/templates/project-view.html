@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>Проект</title>
+		<link rel="stylesheet" href="/css/styles.css">
+	</head>
+	<body>
+		<div class="sidenav">
+ 			<a href="/addtask">Добавить задание</a>
+			<a href="/addproject" >Добавить проект</a>
+			<a href="/addgroup">Добавить группу</a>
+			<a href="/tasks">Задания</a>
+			<a href="/projects">Проекты</a>
+			<a href="/groups">Группы</a>
+			<a href="/favorites">Избранное</a>
+		</div>
+		<div class="main">
+			<form th:action="@{'/projects/'+${project.id}}" method="post">
+				<button type="submit" name="edit">
+				Сменить название проекта</button>
+				<button type="submit" name ="deleteProject">
+				Удалить проект</button>
+			</form>
+			<div th:text="${project.name}"></div>
+			<div >ЗАДАНИЯ</div>
+			<a th:each="t: ${project.tasks}"
+				th:href="'/tasks/'+${t.id}" 
+				th:text="${t.name}">
+			</a>
+		</div>
+	</body>
+</html>

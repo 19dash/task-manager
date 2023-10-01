@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>Группа</title>
+		<link rel="stylesheet" href="/css/styles.css" />
+	</head>
+	<body>
+		<div class="sidenav">
+ 			<a href="/addtask">Добавить задание</a>
+			<a href="/addproject" >Добавить проект</a>
+			<a href="/addgroup">Добавить группу</a>
+			<a href="/tasks">Задания</a>
+			<a href="/projects">Проекты</a>
+			<a href="/groups">Группы</a>
+			<a href="/favorites">Избранное</a>
+		</div>
+		<div class="main">
+			<form  th:object="${user}" th:action="@{'/groups/'+${group.id}}"  method="post">
+				<select  th:field="*{id}">
+					<option value="">Выберите пользователя</option>
+					<option th:each="u: ${users}"
+					th:text="${u.name}"
+					th:value="${u.id}"></option>
+				</select><br/>
+				<button name="invite">Пригласить участника</button><br />
+				<button name="edit">Сменить название группы</button><br />
+				<button name="deleteGroup">Удалить группу</button><br />
+				<div><h2 th:text="${group.name}"></h2></div>
+				<div><h3>УЧАСТНИКИ</h3></div>
+				<div th:each="m: ${group.members}">
+					<div>
+						<p th:text="${m.user.name}"></p>
+						<button th:if="${curUser.role.role==T(main.auxiliary.Roles).ADMIN
+						AND m.user.id!=curUser.user.id}"
+						type="submit" name="deleteMember" th:value="${m.user.id}">
+						Удалить участника</button><br/>
+					</div>
+				</div>
+			</form>
+		</div>
+	</body>
+</html>

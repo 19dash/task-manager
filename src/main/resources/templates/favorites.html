@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>Избранное</title>
+		<link rel="stylesheet" href="/css/styles.css">
+	</head>
+	<body>
+		<div class="sidenav">
+ 			<a href="/addtask">Добавить задание</a>
+			<a href="/addproject" >Добавить проект</a>
+			<a href="/addgroup">Добавить группу</a>
+			<a href="/tasks">Задания</a>
+			<a href="/projects">Проекты</a>
+			<a href="/groups">Группы</a>
+			<a href="/favorites">Избранное</a>
+		</div>
+		<div class="main">
+			<h2>Избранное</h2>
+			<ul>
+			<li th:each="f: ${favorites}">
+			<a 
+				th:href="'/tasks/'+${f.id}" 
+				th:text="${f.name}">
+			</a>
+			</li>
+			</ul>
+		</div>
+	</body>
+</html>

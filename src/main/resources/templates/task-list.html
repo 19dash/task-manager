@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>Задания</title>
+		<link rel="stylesheet" href="/css/styles.css" />
+	</head>
+	<body>
+		<div class="sidenav">
+ 			<a href="/addtask">Добавить задание</a>
+			<a href="/addproject" >Добавить проект</a>
+			<a href="/addgroup">Добавить группу</a>
+			<a href="/tasks">Задания</a>
+			<a href="/projects">Проекты</a>
+			<a href="/groups">Группы</a>
+			<a href="/favorites">Избранное</a>
+		</div>
+		<div class="main">
+		<h2>Задания</h2>
+			<form action="/tasks" method="post" th:object="${fo}">
+				<label>Найти по исполнителю: </label>
+				<select th:field="*{executor.id}">
+					<option value="">-</option>
+					<option th:each="u: ${users}"
+						th:value="${u.id}"
+						th:text="${u.name}">
+					</option>
+				</select><br/>
+				<label>Найти по проекту: </label>
+				<select th:field="*{project.id}">
+					<option value=''>-</option>
+					<option th:each="p: ${projects}" 
+						th:value="${p.id}"
+						th:text="${p.name}">
+					</option>
+				</select><br/>
+				<label>Найти по дате: </label>
+				<input type="date" th:field="*{dueDate}"><br/>
+				<label>Поиск: </label>
+				<input type="text" th:field="*{keyword}"><br/>
+				<label>Сортировать по дате: </label>
+				<input  type="checkbox" value="sortByDate" 
+				th:field="*{sortByDate}"><br />
+				<button name="search">Искать</button>
+			</form>
+			<ul>
+			<li th:each="t: ${tasks}">
+			<a 
+				th:href="'/tasks/'+${t.id}" 
+				th:text="${t.name}">
+			</a>
+			</li>
+			</ul>
+		</div>
+		<script>
+		$('#submit').click(function() {
+			$.ajax({
+				url: '/tasks',
+				type: 'POST',
+				data: {}             
+			});
+		});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title th:text="${header}"></title>
+	<link rel="stylesheet" href="/css/styles.css" />
+	</head>
+	<body>
+		<div class="sidenav">
+ 			<a href="/addtask">Добавить задание</a>
+			<a href="/addproject" >Добавить проект</a>
+			<a href="/addgroup">Добавить группу</a>
+			<a href="/tasks">Задания</a>
+			<a href="/projects">Проекты</a>
+			<a href="/groups">Группы</a>
+			<a href="/favorites">Избранное</a>
+		</div>
+		<div class="main">
+			<h2 th:text="${header}"></h2>
+			<form th:action="@{${path}}" method="post" th:object="${task}">
+				<label>Название:</label>
+				<input type="text" th:field="*{name}"><br />
+				<p style="color: red;" th:if="${#fields.hasErrors('name')}" 
+				th:errors="*{name}"></p><br/>
+				<label>Исполнитель:</label><br/>
+				<select th:field="*{executor.id}" id="userList">
+					<option  th:each="u: ${users}"
+						th:text="${u.name}"
+						th:value="${u.id}">
+					</option>
+				</select><br/>
+				<label>Приоритет: </label><br/>
+				<select th:field="*{priority}">
+					<option th:value=1>1</option>
+					<option th:value=2>2</option>
+					<option th:value=3>3</option>
+				</select><br />
+				<label>Статус: </label>
+				<select th:field="*{status}">
+					<option th:value="${T(main.auxiliary.TaskStatus).NOTSTARTED}">НЕ НАЧАТО</option>
+					<option th:value="${T(main.auxiliary.TaskStatus).INPROGRESS}">В ПРОЦЕССЕ</option>
+					<option th:value="${T(main.auxiliary.TaskStatus).COMPLETED}">ЗАВЕРШЕНО</option>
+				</select><br/>
+				<label>Проект: </label>
+				<select th:field="*{project.id}">
+					<option th:each="p: ${projects}" 
+						th:text="${p.name}"
+						th:value="${p.id}">
+					</option>
+				</select><br/>
+				<label>Группа: </label>
+				<select onchange="clck(this)">
+					<option th:each="g: ${groups}" 
+						th:text="${g.name}"
+						th:value="${g.id}">
+					</option>
+				</select><br/>
+				<label>Описание: </label>
+				<input type="text" th:field="*{description}"><br />
+				<label>Дедлайн: </label><br/>
+				<input type="date" th:field="*{dueDate}">
+				<p style="color: red;" th:if="${#fields.hasErrors('dueDate')}"
+				 th:errors="*{dueDate}"
+	            ></p><br/>
+				<button type="submit" name="save">Сохранить</button>
+			</form>
+		</div>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js">
+		</script>
+		<script>
+		function clck(e) {
+			var id = e.value;
+			$.ajax({
+				type : "GET",
+				url : "/addtask1",
+				data : {groupId:id},
+				success:function(data) {
+					var html;
+					var len = data.length;
+					$('#userList')
+					.find('option')
+					.remove();
+					for ( var i = 0; i < len; i++) {
+						html += '<option value="' + data[i].id + '">'
+							 + data[i].name + '</option>';
+					}
+					$('#userList').html(html);
+				}
+			});
+		}
+		</script>
+	</body>
+</html>
